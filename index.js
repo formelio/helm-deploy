@@ -102,12 +102,12 @@ const run = async () => {
 
     if (task === "remove") {
       // Delete the deployment
-      await exec.exec(helm, ["delete", "-n", namespace, release], {
+      await exec.exec("helm", ["delete", "-n", namespace, release], {
         ignoreReturnCode: true,
       });
     } else {
       // Execute the deployment
-      await exec.exec(helm, args);
+      await exec.exec("helm", args);
     }
   } catch (err) {
     core.error(err);

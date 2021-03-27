@@ -22,6 +22,6 @@ RUN apk add --no-cache ca-certificates \
 
 COPY . /usr/src
 
-RUN ["yarn", "install"]
+RUN ["yarn", "--cwd", "/usr/src", "install"]
 
 ENTRYPOINT ["node", "--experimental-modules", "/usr/src/index.js"]

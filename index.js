@@ -72,9 +72,9 @@ const run = async () => {
     ];
 
     // Per https://helm.sh/docs/faq/#xdg-base-directory-support
-    process.env.XDG_DATA_HOME = "/root/.helm/";
-    process.env.XDG_CACHE_HOME = "/root/.helm/";
-    process.env.XDG_CONFIG_HOME = "/root/.helm/";
+    process.env.XDG_DATA_HOME = "/root/.local/share";
+    process.env.XDG_CACHE_HOME = "/root/.cache";
+    process.env.XDG_CONFIG_HOME = "/root/.config";
 
     if (dryRun) args.push("--dry-run");
     if (image) args.push(`--set=image.name=${image}`);

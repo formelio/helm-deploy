@@ -1,5 +1,4 @@
 import core from "@actions/core";
-import github from "@actions/github";
 import exec from "@actions/exec";
 import { promises as fsp } from "fs";
 
@@ -31,13 +30,6 @@ const getValueFiles = (files) => {
   return fileList.filter((f) => !!f);
 };
 
-const deleteCmd = (helm, namespace, release) => {
-  if (helm === "helm3") {
-    return ["delete", "-n", namespace, release];
-  }
-  return ["delete", "--purge", release];
-};
-
 const run = async () => {
   try {
     const release = core.getInput("release");
@@ -49,7 +41,6 @@ const run = async () => {
     const valueFiles = getValueFiles(core.getInput("value-files"));
     const secretsFiles = getValueFiles(core.getInput("secrets-files"));
     const task = core.getInput("task");
-    const helm = core.getInput("helm") || "helm3";
     const timeout = core.getInput("timeout");
     const dryRun = core.getInput("dry-run");
     const atomic = core.getInput("atomic") || true;
@@ -65,7 +56,6 @@ const run = async () => {
     core.debug(`param: valueFiles = "${JSON.stringify(valueFiles)}"`);
     core.debug(`param: secretsFiles = "${JSON.stringify(secretsFiles)}"`);
     core.debug(`param: task = "${task}"`);
-    core.debug(`param: helm = ${helm}`);
     core.debug(`param: timeout = ${timeout}`);
     core.debug(`param: dryRun = "${dryRun}"`);
     core.debug(`param: atomic = "${atomic}"`);
@@ -82,13 +72,9 @@ const run = async () => {
     ];
 
     // Per https://helm.sh/docs/faq/#xdg-base-directory-support
-    if (helm === "helm3") {
-      process.env.XDG_DATA_HOME = "/root/.helm/";
-      process.env.XDG_CACHE_HOME = "/root/.helm/";
-      process.env.XDG_CONFIG_HOME = "/root/.helm/";
-    } else {
-      process.env.HELM_HOME = "/root/.helm/";
-    }
+    process.env.XDG_DATA_HOME = "/root/.helm/";
+    process.env.XDG_CACHE_HOME = "/root/.helm/";
+    process.env.XDG_CONFIG_HOME = "/root/.helm/";
 
     if (dryRun) args.push("--dry-run");
     if (image) args.push(`--set=image.name=${image}`);
@@ -114,12 +100,13 @@ const run = async () => {
       await fsp.writeFile(process.env.KUBECONFIG, process.env.KUBECONFIG_FILE);
     }
 
-    // Execute the deployment
     if (task === "remove") {
-      await exec.exec(helm, deleteCmd(helm, namespace, release), {
+      // Delete the deployment
+      await exec.exec(helm, ["delete", "-n", namespace, release], {
         ignoreReturnCode: true,
       });
     } else {
+      // Execute the deployment
       await exec.exec(helm, args);
     }
   } catch (err) {

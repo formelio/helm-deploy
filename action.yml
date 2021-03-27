@@ -40,9 +40,6 @@ inputs:
   timeout:
     description: Helm upgrade timeout.
     required: false
-  helm:
-    description: Helm binary to execute, one of [helm, helm3]. Defaults to helm3.
-    required: false
   image:
     description: Image to deploy. Overrides the image.name value.
     required: false

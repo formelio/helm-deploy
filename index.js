@@ -102,7 +102,7 @@ const run = async () => {
     valueFiles.forEach((f) => args.push(`--values=${f}`));
 
     // Add all the Helm Secrets files
-    valueFiles.forEach((f) => args.push(`--values=secrets://${f}`));
+    secretsFiles.forEach((f) => args.push(`--values=secrets://${f}`));
 
     // Add the individually added values
     await fsp.writeFile("./values.yml", values);

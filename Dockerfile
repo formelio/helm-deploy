@@ -11,7 +11,8 @@ RUN apk add --no-cache ca-certificates \
     curl -L ${BASE_URL}/${HELM_FILE} | tar xvz && \
     mv linux-amd64/helm /usr/bin/helm && \
     chmod +x /usr/bin/helm && \
-    rm -rf linux-amd64
+    rm -rf linux-amd64 && \
+    helm plugin install https://github.com/jkroepke/helm-secrets --version v3.5.0
 
 COPY . /usr/src
 

@@ -3,7 +3,7 @@ description: Helm deploy action with support for Helm Secrets
 inputs:
   # Many of these are taken from deliverybot/helm
   release:
-    description: Helm release name. Will be combined with track if set. (required)
+    description: Helm release name. (required)
     required: true
   namespace:
     description: Kubernetes namespace name. (required)
@@ -31,7 +31,7 @@ inputs:
     description: Task name. If the task is "remove" it will remove the configured helm release.
     required: false
   dry-run:
-    description: Simulate an upgrade.
+    description: Helm dry-run option
     required: false
   atomic:
     description: If true, upgrade process rolls back changes made in case of failed upgrade.

@@ -39,8 +39,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    needs: build
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2

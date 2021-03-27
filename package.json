@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Github action that performs a Helm deployment with support for Helm Secrets",
   "main": "index.js",
+  "type": "module",
   "repository": "git@github.com:ivido/helm-deploy.git",
   "author": "Jari Maijenburg <jari.maijenburg@ivido.nl>",
   "license": "MIT",

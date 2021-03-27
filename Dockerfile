@@ -24,4 +24,4 @@ COPY . /usr/src
 
 RUN ["yarn", "install"]
 
-ENTRYPOINT ["node", "/usr/src/index.js"]
+ENTRYPOINT ["node", "--experimental-modules", "/usr/src/index.js"]

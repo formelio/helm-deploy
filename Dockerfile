@@ -6,7 +6,7 @@ ENV HELM_FILE="helm-v3.5.3-linux-amd64.tar.gz"
 
 RUN apk add --no-cache ca-certificates \
     --repository http://dl-3.alpinelinux.org/alpine/edge/community/ \
-    jq curl bash nodejs yarn && \
+    jq curl bash nodejs yarn git && \
     \
     curl -L ${BASE_URL}/${HELM_FILE} | tar xvz && \
     mv linux-amd64/helm /usr/bin/helm && \

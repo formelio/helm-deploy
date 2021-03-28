@@ -63,7 +63,6 @@ const run = async () => {
     core.debug(`param: tag = "${tag}"`);
 
     const args = [
-      "secrets",
       "upgrade",
       release,
       chart,
@@ -89,7 +88,7 @@ const run = async () => {
     valueFiles.forEach((f) => args.push(`--values=${f}`));
 
     // Add all the Helm Secrets files
-    secretsFiles.forEach((f) => args.push(`--values=${f}`));
+    secretsFiles.forEach((f) => args.push(`--values=secrets://${f}`));
 
     // Add the individually added values
     await fsp.writeFile("/values.yml", values);

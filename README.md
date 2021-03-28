@@ -25,6 +25,7 @@ Github action that performs a [Helm](https://helm.sh/) deployment with support f
 ### Environment
 
 - `KUBECONFIG_FILE`: Kubeconfig file for Kubernetes cluster access.
+- `GCP_KMS_KEY_FILE`: Key file for a [GCP service account](https://cloud.google.com/docs/authentication/production) with access to the KMS keys. Required if secrets files are (partially) encrypted with GCP KMS.
 
 ## Example usage
 
@@ -54,4 +55,5 @@ jobs:
           tag: ${{ github.sha }}
         env:
           KUBECONFIG_FILE: ${{ secrets.KUBECONFIG }}
+          GCP_KMS_KEY_FILE: ${{ secrets.GCP_KMS_KEY }}
 ```

@@ -89,10 +89,19 @@ const run = async () => {
     await fsp.writeFile("./values.yml", values);
     args.push("--values=./values.yml");
 
-    // Setup the necessary Kubeconfig file
+    // Setup the Kubeconfig file
     if (process.env.KUBECONFIG_FILE) {
-      process.env.KUBECONFIG = "./kubeconfig.yml";
+      process.env.KUBECONFIG = "/root/kubeconfig.yml";
       await fsp.writeFile(process.env.KUBECONFIG, process.env.KUBECONFIG_FILE);
+    }
+
+    // Setup the GCP credentials, if specified
+    if (process.env.GCP_KMS_KEY_FILE) {
+      process.env.GOOGLE_APPLICATION_CREDENTIALS = "/root/gcp_kms_key.json";
+      await fsp.writeFile(
+        process.env.GOOGLE_APPLICATION_CREDENTIALS,
+        process.env.GCP_KMS_KEY_FILE
+      );
     }
 
     if (task === "remove") {

@@ -2,6 +2,10 @@
 
 Github action that performs a [Helm](https://helm.sh/) deployment with support for [Helm Secrets](https://github.com/jkroepke/helm-secrets). Largely based on [deliverybot/helm](https://github.com/deliverybot/helm). Only supports Helm 3.
 
+## Limitations
+- No Helm 2 support
+- Only supports the SOPS secret driver with GCP KMS (and possibly PGP)
+
 ## Parameters
 
 ### Inputs

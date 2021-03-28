@@ -1,4 +1,4 @@
-name: Helm deploy
+name: Helm deploy with support for Helm Secrets
 description: Helm deploy action with support for Helm Secrets
 author: Ivido
 inputs:

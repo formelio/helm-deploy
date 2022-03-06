@@ -24,9 +24,9 @@ Github action that performs a [Helm](https://helm.sh/) deployment with support f
 - `atomic`: If true, upgrade process rolls back changes made in case of failed upgrade. Defaults to true.
 - `timeout`: specify a timeout for helm deployment
 - `image`: Image to deploy. Overrides the image.name value.
-- `imageFields`: Fields to insert the image name in. Expects JSON encoded array or a string. Defaults to "image.name".
+- `image-fields`: Fields to insert the image name in. Expects JSON encoded array or a string. Defaults to "image.name".
 - `tag`: Image tag to deploy, usually commit sha or Git tag. Overrides the image.tag value.
-- `tagFields`: Fields to insert the image tags in. Expects JSON encoded array or a string. Defaults to "image.tag".
+- `tag-fields`: Fields to insert the image tags in. Expects JSON encoded array or a string. Defaults to "image.tag".
 
 ### Environment
 

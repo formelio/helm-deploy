@@ -12,22 +12,22 @@ const getValues = (values) => {
   return values;
 };
 
-const getValueFiles = (files) => {
-  let fileList;
-  if (typeof files === "string") {
+const parseJsonList = (json) => {
+  let list;
+  if (typeof json === "string") {
     try {
-      fileList = JSON.parse(files);
+      list = JSON.parse(json);
     } catch (err) {
       // Assume it's a single string.
-      fileList = [files];
+      list = [json];
     }
   } else {
-    fileList = files;
+    list = json;
   }
-  if (!Array.isArray(fileList)) {
+  if (!Array.isArray(list)) {
     return [];
   }
-  return fileList.filter((f) => !!f);
+  return list.filter((f) => !!f);
 };
 
 const run = async () => {
@@ -38,14 +38,16 @@ const run = async () => {
     const chartVersion = core.getInput("chart-version");
     const repository = core.getInput("repository");
     const values = getValues(core.getInput("values"));
-    const valueFiles = getValueFiles(core.getInput("value-files"));
-    const secretsFiles = getValueFiles(core.getInput("secrets-files"));
+    const valueFiles = parseJsonList(core.getInput("value-files"));
+    const secretsFiles = parseJsonList(core.getInput("secrets-files"));
     const task = core.getInput("task");
     const timeout = core.getInput("timeout");
     const dryRun = core.getInput("dry-run");
     const atomic = core.getInput("atomic") || true;
     const image = core.getInput("image");
+    const imageFields = parseJsonList(core.getInput("image-fields"));
     const tag = core.getInput("tag");
+    const tagFields = parseJsonList(core.getInput("tag-fields"));
 
     core.debug(`param: release = "${release}"`);
     core.debug(`param: namespace = "${namespace}"`);
@@ -60,7 +62,9 @@ const run = async () => {
     core.debug(`param: dryRun = "${dryRun}"`);
     core.debug(`param: atomic = "${atomic}"`);
     core.debug(`param: image = "${image}"`);
+    core.debug(`param: imageFields = "${JSON.stringify(imageFields)}"`)
     core.debug(`param: tag = "${tag}"`);
+    core.debug(`param: tagFields = "${JSON.stringify(tagFields)}"`)
 
     const args = [
       "upgrade",
@@ -76,9 +80,25 @@ const run = async () => {
     process.env.XDG_CACHE_HOME = "/root/.cache";
     process.env.XDG_CONFIG_HOME = "/root/.config";
 
+    // Set default image field to "image.name"
+    if (!imageFields) imageFields = ["image.name"]
+
+    // Set default tag field to "image.tag"
+    if (!tagFields) tagFields = ["image.tag"]
+
+    if (image) {
+      for (const imageField of imageFields) {
+        args.push(`--set=${imageField}=${image}`);
+      }
+    }
+
+    if (tag) {
+      for (const tagField of tagFields) {
+        args.push(`--set=${tagField}=${tag}`);
+      }
+    }
+
     if (dryRun) args.push("--dry-run");
-    if (image) args.push(`--set=image.name=${image}`);
-    if (tag) args.push(`--set=image.tag=${tag}`);
     if (chartVersion) args.push(`--version=${chartVersion}`);
     if (repository) args.push(`--repo=${repository}`);
     if (timeout) args.push(`--timeout=${timeout}`);

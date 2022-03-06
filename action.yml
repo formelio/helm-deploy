@@ -42,10 +42,16 @@ inputs:
     description: Helm upgrade timeout.
     required: false
   image:
-    description: Image to deploy. Overrides the image.name value.
+    description: Image to deploy. Overrides the values specified by imageFields.
+    required: false
+  imageFields:
+    description: Fields to insert the image name in. Expects JSON encoded array or a string. Defaults to "image.name".
     required: false
   tag:
-    description: Image tag to deploy, usually commit sha or Git tag. Overrides the image.tag value.
+    description: Image tag to deploy, usually commit sha or Git tag. Overrides the values specified by tagFields.
+    required: false
+  tagFields:
+    description: Fields to insert the image tags in. Expects JSON encoded array or a string. Defaults to "image.tag".
     required: false
 runs:
   using: docker

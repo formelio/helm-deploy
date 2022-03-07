@@ -229,4 +229,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# IDEA
+.idea/
+
 # End of https://www.toptal.com/developers/gitignore/api/vim,linux,windows,node,visualstudiocode,macos

@@ -45,9 +45,9 @@ const run = async () => {
     const dryRun = core.getInput("dry-run");
     const atomic = core.getInput("atomic") || true;
     const image = core.getInput("image");
-    const imageFields = parseJsonList(core.getInput("image-fields"));
+    let imageFields = parseJsonList(core.getInput("image-fields"));
     const tag = core.getInput("tag");
-    const tagFields = parseJsonList(core.getInput("tag-fields"));
+    let tagFields = parseJsonList(core.getInput("tag-fields"));
 
     core.debug(`param: release = "${release}"`);
     core.debug(`param: namespace = "${namespace}"`);
@@ -81,10 +81,10 @@ const run = async () => {
     process.env.XDG_CONFIG_HOME = "/root/.config";
 
     // Set default image field to "image.name"
-    if (!imageFields) imageFields = ["image.name"]
+    if (imageFields.length === 0) imageFields = ["image.name"]
 
     // Set default tag field to "image.tag"
-    if (!tagFields) tagFields = ["image.tag"]
+    if (tagFields.length === 0) tagFields = ["image.tag"]
 
     if (image) {
       for (const imageField of imageFields) {

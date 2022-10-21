@@ -48,7 +48,6 @@ const run = async () => {
     let imageFields = parseJsonList(core.getInput("image-fields"));
     const tag = core.getInput("tag");
     let tagFields = parseJsonList(core.getInput("tag-fields"));
-    const dependencyUpdate = core.getInput("dependency-update");
 
     core.debug(`param: release = "${release}"`);
     core.debug(`param: namespace = "${namespace}"`);
@@ -66,7 +65,6 @@ const run = async () => {
     core.debug(`param: imageFields = "${JSON.stringify(imageFields)}"`)
     core.debug(`param: tag = "${tag}"`);
     core.debug(`param: tagFields = "${JSON.stringify(tagFields)}"`)
-    core.debug(`param: dependencyUpdate = ${dependencyUpdate}`)
 
     const args = [
       "upgrade",
@@ -75,6 +73,7 @@ const run = async () => {
       "--install",
       "--wait",
       `--namespace=${namespace}`,
+      "--dependency-update"
     ];
 
     // Per https://helm.sh/docs/faq/#xdg-base-directory-support
@@ -129,10 +128,6 @@ const run = async () => {
         process.env.GOOGLE_APPLICATION_CREDENTIALS,
         process.env.GCP_KMS_KEY_FILE
       );
-    }
-
-    if (dependencyUpdate) {
-      args.push("--dependency-update")
     }
 
     if (task === "remove") {

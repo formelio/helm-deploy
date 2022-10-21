@@ -53,6 +53,9 @@ inputs:
   tag-fields:
     description: Fields to insert the image tags in. Expects JSON encoded array or a string. Defaults to "image.tag".
     required: false
+  dependency-update:
+    description: Boolean whether helm should automatically download dependencies. Might not be supported by all helm versions.
+    required: false
 runs:
   using: docker
   image: Dockerfile

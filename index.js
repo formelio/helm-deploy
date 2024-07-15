@@ -1,14 +1,21 @@
 import core from "@actions/core";
 import exec from "@actions/exec";
+import { parseCSV } from "@google-github-actions/actions-utils";
 import { promises as fsp } from "fs";
 
-const getValues = (values) => {
-  if (!values) {
-    return JSON.stringify({});
+const getValues = (input) => {
+  const values = [];
+
+  for (const line of input.split(/\r|\n/)) {
+    const pieces = parseCSV(line);
+
+    for (const piece of pieces) {
+      const [key, value] = piece.trim().split('=', 2);
+
+      values.push([key, value]);
+    }
   }
-  if (typeof values === "object") {
-    return JSON.stringify(values);
-  }
+
   return values;
 };
 
@@ -87,6 +94,12 @@ const run = async () => {
     // Set default tag field to "image.tag"
     if (tagFields.length === 0) tagFields = ["image.tag"]
 
+    if (values) {
+      for (const [key, value] of values) {
+        args.push(`--set=${key}=${value}`);
+      }
+    }
+
     if (image) {
       for (const imageField of imageFields) {
         args.push(`--set=${imageField}=${image}`);
@@ -110,10 +123,6 @@ const run = async () => {
 
     // Add all the Helm Secrets files
     secretsFiles.forEach((f) => args.push(`--values=secrets://${f}`));
-
-    // Add the individually added values
-    await fsp.writeFile("/values.yml", values);
-    args.push("--values=/values.yml");
 
     // Setup the Kubeconfig file
     if (process.env.KUBECONFIG_FILE) {

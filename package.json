@@ -9,6 +9,7 @@
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.9.1",
-    "@actions/exec": "^1.0.4"
+    "@actions/exec": "^1.0.4",
+    "@google-github-actions/actions-utils": "^0.8.2"
   }
 }

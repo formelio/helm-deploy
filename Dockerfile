@@ -1,7 +1,7 @@
 FROM alpine:3.13
 
-ENV HELM_DOWNLOAD_URL="https://get.helm.sh/helm-v3.10.0-linux-amd64.tar.gz"
-ENV SOPS_DOWNLOAD_URL="https://github.com/getsops/sops/releases/download/v3.8.0/sops-v3.8.0.linux.amd64"
+ENV HELM_DOWNLOAD_URL="https://get.helm.sh/helm-v3.18.6-linux-amd64.tar.gz"
+ENV SOPS_DOWNLOAD_URL="https://github.com/getsops/sops/releases/download/v3.10.2/sops-v3.10.2.linux.amd64"
 
 RUN apk add --no-cache ca-certificates \
     --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ \
@@ -14,7 +14,7 @@ RUN apk add --no-cache ca-certificates \
     mv linux-amd64/helm /usr/bin/helm && \
     chmod +x /usr/bin/helm && \
     rm -rf linux-amd64 && \
-    helm plugin install https://github.com/jkroepke/helm-secrets --version v3.5.0
+    helm plugin install https://github.com/jkroepke/helm-secrets
 
 COPY . /usr/src
 

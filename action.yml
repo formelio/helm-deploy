@@ -55,7 +55,7 @@ inputs:
     required: false
 runs:
   using: docker
-  image: Dockerfile
+  image: ghcr.io/formelio/helm-deploy:${{ github.action_ref }}
 branding:
   icon: anchor
   color: blue

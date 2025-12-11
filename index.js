@@ -89,6 +89,13 @@ const run = async () => {
     process.env.XDG_CACHE_HOME = "/root/.cache";
     process.env.XDG_CONFIG_HOME = "/root/.config";
 
+    // Add all the value files
+    valueFiles.forEach((f) => args.push(`--values=${f}`));
+
+    // Add all the Helm Secrets files
+    secretsFiles.forEach((f) => args.push(`--values=secrets://${f}`));
+
+
     // Set default image field to "image.name"
     if (imageFields.length === 0) imageFields = ["image.name"]
 
@@ -118,12 +125,6 @@ const run = async () => {
     if (repository) args.push(`--repo=${repository}`);
     if (timeout) args.push(`--timeout=${timeout}`);
     if (atomic === true) args.push("--atomic");
-
-    // Add all the value files
-    valueFiles.forEach((f) => args.push(`--values=${f}`));
-
-    // Add all the Helm Secrets files
-    secretsFiles.forEach((f) => args.push(`--values=secrets://${f}`));
 
     // Setup the Kubeconfig file
     if (process.env.KUBECONFIG_FILE) {

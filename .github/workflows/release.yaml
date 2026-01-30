@@ -5,9 +5,9 @@ on:
     types: [released]
 
 jobs:
-  environment: production
-
   build-and-push:
+    environment: production
+
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

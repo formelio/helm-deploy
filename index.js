@@ -80,7 +80,8 @@ const run = async () => {
       "--install",
       "--wait",
       `--namespace=${namespace}`,
-      "--dependency-update"
+      "--dependency-update",
+      "--create-namespace",
     ];
 
     // Per https://helm.sh/docs/faq/#xdg-base-directory-support

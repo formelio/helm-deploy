@@ -31,23 +31,3 @@ jobs:
           docker push ghcr.io/${{ github.repository }}:${{ github.sha }}
           docker push ghcr.io/${{ github.repository }}:latest
           docker push ghcr.io/${{ github.repository }}:${{ github.event.release.tag_name }}
-
-      - name: Generate GitHub App Token
-        id: generate_token
-        uses: actions/create-github-app-token@v1
-        with:
-          app-id: ${{ secrets.APP_ID }}
-          private-key: ${{ secrets.APP_KEY }}
-
-      - name: Update action.yml image tag
-        run: |
-          sed -i "s|^  image: docker://ghcr.io/.\+/helm-deploy:.*$|  image: docker://ghcr.io/${{ github.repository }}:${{ github.event.release.tag_name }}|" action.yml
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add action.yml
-          git commit -m "chore: update action.yml image tag to ${{ github.event.release.tag_name }}" || echo "No changes to commit"
-          git push
-          git tag ${{ github.event.release.tag_name }} -f
-          git push origin ${{ github.event.release.tag_name }} -f
-        env:
-          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}

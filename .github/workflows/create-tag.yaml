@@ -1,0 +1,59 @@
+name: Create Tag
+
+run-name: Create Tag ${{ github.event.inputs.new_tag || github.ref_name }}
+
+on:
+  push:
+    branches:
+      - 'release/**'
+  workflow_dispatch:
+    inputs:
+      new_tag:
+        description: 'New tag (must start with v)'
+        required: true
+        default: 'v'
+
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+
+    environment: production
+
+    if: github.event.created == false
+
+    steps:
+      - name: Set tag value
+        id: set_tag_value
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            TAG="${{ github.event.inputs.new_tag }}"
+          else
+            # Extract <tag> from branch name: refs/heads/release/<tag>/...
+            REF="${GITHUB_REF}"
+            TAG=$(echo "$REF" | sed -E 's#refs/heads/release/([^/]+).*#\1#')
+          fi
+          if [[ ! $TAG =~ ^v ]]; then
+            echo "Tag must start with v"
+            exit 1
+          fi
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Generate GitHub App Token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_APP_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+          ref: ${{ github.ref }}
+
+      - name: Create tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions@github.com"
+          git tag "${{ steps.set_tag_value.outputs.tag }}"
+          git push https://x-access-token:${{steps.generate_token.outputs.token}}@github.com/${{ github.repository }}.git --tags

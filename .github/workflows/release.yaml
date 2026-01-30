@@ -5,6 +5,8 @@ on:
     types: [released]
 
 jobs:
+  environment: production
+
   build-and-push:
     runs-on: ubuntu-latest
     steps:

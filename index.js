@@ -80,7 +80,6 @@ const run = async () => {
       "--install",
       "--wait",
       `--namespace=${namespace}`,
-      "--dependency-update",
       "--create-namespace",
     ];
 

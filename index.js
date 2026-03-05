@@ -80,6 +80,7 @@ const run = async () => {
       "--install",
       "--wait",
       `--namespace=${namespace}`,
+      "--dependency-update",
       "--create-namespace",
     ];
 
@@ -145,6 +146,8 @@ const run = async () => {
         ignoreReturnCode: true,
       });
     } else {
+      // Build dependencies
+      await exec.exec("helm", ["dependency", "build"])
       // Execute the deployment
       await exec.exec("helm", args);
     }

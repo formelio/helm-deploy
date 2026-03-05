@@ -84,6 +84,12 @@ const run = async () => {
       "--create-namespace",
     ];
 
+    const dependencyBuildArgs = [
+      "dependency",
+      "build",
+      chart
+    ];
+
     // Per https://helm.sh/docs/faq/#xdg-base-directory-support
     process.env.XDG_DATA_HOME = "/root/.local/share";
     process.env.XDG_CACHE_HOME = "/root/.cache";
@@ -147,7 +153,7 @@ const run = async () => {
       });
     } else {
       // Build dependencies
-      await exec.exec("helm", ["dependency", "build"])
+      await exec.exec("helm", dependencyBuildArgs)
       // Execute the deployment
       await exec.exec("helm", args);
     }
